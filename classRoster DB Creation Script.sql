@@ -16,17 +16,17 @@ CREATE TABLE student (
     lastName VARCHAR(50) NOT NULL
 );
 
-CREATE table course (
-	id int primary key AUTO_INCREMENT,
-    name varchar(50) not null,
-    description varchar(255),
-    teacherID int not null,
+CREATE TABLE course (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    description VARCHAR(255),
+    teacherID INT NOT NULL,
     FOREIGN KEY (teacherID) REFERENCES teacher(id)
 );
 
-Create TABLE course_student (
-	courseID int not null,
-    studentID int not null,
+CREATE TABLE course_student (
+	courseID INT NOT NULL,
+    studentID INT NOT NULL,
     FOREIGN KEY (courseID) REFERENCES course(id),
     FOREIGN KEY (studentID) REFERENCES student(id)
 );

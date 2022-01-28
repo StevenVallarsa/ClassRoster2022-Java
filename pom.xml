@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sv</groupId>
-	<artifactId>classroster</artifactId>
+	<artifactId>classroster2022</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>classroster</name>
+	<name>classroster2022</name>
 	<description>Class Roster Tutorial Project to prepare my attempt at using Thymeleaf to turn my home library project into a full stack Java app.</description>
 	<properties>
 		<java.version>11</java.version>
