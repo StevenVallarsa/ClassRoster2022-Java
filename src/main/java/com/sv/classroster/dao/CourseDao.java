@@ -1,6 +1,11 @@
 
 package com.sv.classroster.dao;
 
+import com.sv.classroster.dto.Course;
+import com.sv.classroster.dto.Student;
+import com.sv.classroster.dto.Teacher;
+import java.util.List;
+
 /**
  *
  * @author StevePro

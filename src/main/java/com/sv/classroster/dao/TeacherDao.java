@@ -1,6 +1,9 @@
 
 package com.sv.classroster.dao;
 
+import com.sv.classroster.dto.Teacher;
+import java.util.List;
+
 /**
  *
  * @author StevePro
@@ -11,6 +14,6 @@ public interface TeacherDao {
     List<Teacher> getAllTeachers();
     Teacher addTeacher(Teacher teacher);
     void updateTeacher(Teacher teacher);
-    void delte TeacherById(int id);
+    void deleteTeacherById(int id);
     
 }

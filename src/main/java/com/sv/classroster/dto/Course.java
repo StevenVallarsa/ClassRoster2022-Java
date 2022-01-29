@@ -1,6 +1,7 @@
 
 package com.sv.classroster.dto;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -91,11 +92,11 @@ public class Course {
         this.teacher = teacher;
     }
 
-    public <any> getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(<any> students) {
+    public void setStudents(List<Student> students) {
         this.students = students;
     }
     
