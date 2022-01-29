@@ -14,6 +14,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -55,32 +56,84 @@ public class CourseDaoDB implements CourseDao {
     
     @Override
     public List<Course> getAllCourses() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String SELECT_ALL_COURSES = "SELECT * FROM course";
+        List<Course> courses = jdbc.query(SELECT_ALL_COURSES, new CourseMapper());
+        associateTeacherAndStudents(courses);
+        return courses;
+    }
+    
+    private void associateTeacherAndStudents(List<Course> courses) {
+        for (Course course : courses) {
+            course.setTeacher(getTeacherForCourse(course.getId()));
+            course.setStudents(getStudentsForCourse(course.getId()));
+        }
     }
 
     @Override
+    @Transactional
     public Course addCourse(Course course) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String INSERT_COURSE = "INSERT INTO course (name, description, teacherID VALUES(?,?,?)";
+        jdbc.update(INSERT_COURSE,
+                course.getName(),
+                course.getDescription(),
+                course.getTeacher().getId());
+        int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+        course.setId(newId);
+        insertCourseStudent(course);
+        return course;
+    }
+    
+    private void insertCourseStudent(Course course) {
+        final String INSERT_COURSE_STUDENT = "INSERT INTO course_student (courseID, studentID) VALUES (?, ?)";
+        for (Student student : course.getStudents()) {
+            jdbc.update(INSERT_COURSE_STUDENT, 
+                    course.getId(), 
+                    student.getId());
+        }
     }
 
     @Override
+    @Transactional
     public void updateCourse(Course course) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String UPDATE_COURSE = "UPDATE course SET name = ?, description = ?, teacherID = ? WHERE id = ?";
+        jdbc.update(UPDATE_COURSE,
+                course.getName(),
+                course.getDescription(),
+                course.getTeacher().getId(),
+                course.getId());
+        
+        final String DELETE_COURSE_STUDENT = "DELETE FROM course_student WHERE courseID = ?";
+        jdbc.update(DELETE_COURSE_STUDENT, course.getId());
+        insertCourseStudent(course);
+        
     }
 
     @Override
+    @Transactional
     public void deleteCourseById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String DELETE_COURSE_STUDENT = "DELETE FROM course_student WHERE courseID = ?";
+        jdbc.update(DELETE_COURSE_STUDENT, id);
+        
+        final String DELETE_COURSE_BY_ID = "DELETE FROM course WHERE id = ?";
+        jdbc.update(DELETE_COURSE_BY_ID, id);
+        
+        
     }
 
     @Override
     public List<Course> getCoursesForTeacher(Teacher teacher) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String SELECT_COURSES_FOR_TEACHER = "SELECT * FROM course WHERE teacheriD = ?";
+        List<Course> courses = jdbc.query(SELECT_COURSES_FOR_TEACHER, new CourseMapper(), teacher.getId());
+        associateTeacherAndStudents(courses);
+        return courses;
     }
 
     @Override
     public List<Course> getCoursesForStudent(Student student) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String SELECT_COURSES_FOR_STUDENT = "SELECT c.* FROM course c JOIN course_student cs ON c.id == cs.courseID WHERE cs.studentID = ?";
+        List<Course> courses = jdbc.query(SELECT_COURSES_FOR_STUDENT, new CourseMapper(),   student.getId());
+        associateTeacherAndStudents(courses);
+        return courses;
     }
 
     
