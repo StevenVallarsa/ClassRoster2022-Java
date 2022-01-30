@@ -130,7 +130,7 @@ public class CourseDaoDB implements CourseDao {
 
     @Override
     public List<Course> getCoursesForStudent(Student student) {
-        final String SELECT_COURSES_FOR_STUDENT = "SELECT c.* FROM course c JOIN course_student cs ON c.id == cs.courseID WHERE cs.studentID = ?";
+        final String SELECT_COURSES_FOR_STUDENT = "SELECT c.* FROM course c JOIN course_student cs ON cs.courseID = c.id WHERE cs.studentID = ?";
         List<Course> courses = jdbc.query(SELECT_COURSES_FOR_STUDENT, new CourseMapper(), student.getId());
         associateTeacherAndStudents(courses);
         return courses;
