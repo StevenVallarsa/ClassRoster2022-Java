@@ -50,7 +50,7 @@ public class CourseDaoDB implements CourseDao {
     }
     
     private List<Student> getStudentsForCourse(int id) {
-        final String SELECT_STUDENTS_FOR_COURSE = "SELECT s.* FROM student s JOIN course_student cs ON s.id = cs.studentID on cs.courseID = ?";
+        final String SELECT_STUDENTS_FOR_COURSE = "SELECT s.* FROM student s JOIN course_student cs ON s.id = cs.studentID WHERE cs.courseID = ?";
         return jdbc.query(SELECT_STUDENTS_FOR_COURSE, new StudentMapper(), id);
     }
     
@@ -72,7 +72,7 @@ public class CourseDaoDB implements CourseDao {
     @Override
     @Transactional
     public Course addCourse(Course course) {
-        final String INSERT_COURSE = "INSERT INTO course (name, description, teacherID VALUES(?,?,?)";
+        final String INSERT_COURSE = "INSERT INTO course (name, description, teacherID) VALUES(?,?,?)";
         jdbc.update(INSERT_COURSE,
                 course.getName(),
                 course.getDescription(),
@@ -131,7 +131,7 @@ public class CourseDaoDB implements CourseDao {
     @Override
     public List<Course> getCoursesForStudent(Student student) {
         final String SELECT_COURSES_FOR_STUDENT = "SELECT c.* FROM course c JOIN course_student cs ON c.id == cs.courseID WHERE cs.studentID = ?";
-        List<Course> courses = jdbc.query(SELECT_COURSES_FOR_STUDENT, new CourseMapper(),   student.getId());
+        List<Course> courses = jdbc.query(SELECT_COURSES_FOR_STUDENT, new CourseMapper(), student.getId());
         associateTeacherAndStudents(courses);
         return courses;
     }
