@@ -5,9 +5,7 @@
 
 package com.sv.classroster.controllers;
 
-import com.sv.classroster.dao.CourseDao;
 import com.sv.classroster.dao.StudentDao;
-import com.sv.classroster.dao.TeacherDao;
 import com.sv.classroster.dto.Student;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -28,13 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class StudentController {
 
    @Autowired
-   TeacherDao teacherDao;
-
-   @Autowired
    StudentDao studentDao;
-
-   @Autowired
-   CourseDao courseDao;
    
    @GetMapping("students")
    public String displayStudents(Model model) {

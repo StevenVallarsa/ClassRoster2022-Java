@@ -1,7 +1,5 @@
 package com.sv.classroster.controllers;
 
-import com.sv.classroster.dao.CourseDao;
-import com.sv.classroster.dao.StudentDao;
 import com.sv.classroster.dao.TeacherDao;
 import com.sv.classroster.dto.Teacher;
 import java.util.List;
