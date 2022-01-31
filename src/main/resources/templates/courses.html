@@ -101,9 +101,9 @@
                                 <td th:text='${course.name}'>Course Name</td>
                                 <td th:text="${course.teacher.firstName + ' ' 
                                     + course.teacher.lastName}">Teacher  Name</td>
-                                <td>Details</td>
-                                <td>Edit</td>
-                                <td>Delete</td>
+                                <td><a href="#" th:href="@{/courseDetails(id=${course.id})}">Details</a></td>
+                                <td><a href="#" th:href="@{/editCourse(id=${course.id})}">Edit</a></td>
+                                <td><a href="#" th:href="@{/deleteCourse(id=${course.id})}">Delete</a></td>
                             </tr>
                         </tbody>
                     </table>

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,4 +65,49 @@ public class CourseController {
        
        return "redirect:/courses";
    }
+   
+   @GetMapping("courseDetails")
+   public String courseDetail(int id, Model model) {
+       Course course = courseDao.getCourseById(id);
+       model.addAttribute("course", course);
+       return "courseDetails";
+   }
+   
+   @GetMapping("deleteCourse")
+   public String deleteCourse(int id) {
+       courseDao.deleteCourseById(id);
+       return "redirect:/courses";
+   }
+   
+   @GetMapping("editCourse")
+   public String editCourse(int id, Model model) {
+       Course course = courseDao.getCourseById(id);
+       List<Student> students = studentDao.getAllStudents();
+       List<Teacher> teachers = teacherDao.getAllTeachers();
+       model.addAttribute("course", course);
+       model.addAttribute("students", students);
+       model.addAttribute("teachers", teachers);
+       return "editCourse";
+   }
+   
+   @PostMapping("editCourse")
+   public String editCourseDetails(Course course, HttpServletRequest request) {
+       String teacherID = request.getParameter("teacherId");
+       String[] studentIDs = request.getParameterValues("studentId");
+       
+       course.setTeacher(teacherDao.getTeacherById(Integer.parseInt(teacherID)));
+       
+       List<Student> students = new ArrayList<>();
+       
+       for (String studentID : studentIDs) {
+           students.add(studentDao.getStudentById(Integer.parseInt(studentID)));
+       }
+       
+       course.setStudents(students);
+       courseDao.updateCourse(course);
+       
+       return "redirect:/courses";
+   }
+   
+   
 }
