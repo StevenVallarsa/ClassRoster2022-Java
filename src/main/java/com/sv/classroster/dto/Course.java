@@ -25,7 +25,6 @@ public class Course {
     @Size(max = 255, message = "Description must be fewer than 255 characters.")
     private String description;
     
-    @NotNull
     private Teacher teacher;
     
     private List<Student> students;
